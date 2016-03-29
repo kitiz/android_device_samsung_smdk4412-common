@@ -36,7 +36,7 @@ PRODUCT_COPY_FILES := \
 # Audio
 PRODUCT_COPY_FILES += \
     $(COMMON_PATH)/configs/audio_effects.conf:system/etc/audio_effects.conf \
-    $(COMMON_PATH)/configs/audio_policy.conf:system/etc/audio_policy.conf
+    $(COMMON_PATH)/configs/audio_policy.conf:system/etc/audio_policy.conf \
     $(COMMON_PATH)/audio/silence.wav:system/etc/sound/silence.wav
 
 # Camera FW
@@ -70,17 +70,13 @@ PRODUCT_PACKAGES := \
     com.android.future.usb.accessory \
     gralloc.exynos4 \
     hwcomposer.exynos4 \
-    libExynosHWCService \
-    libExynosIPService \
     libfimg \
     libnetcmdiface \
     libsecion \
     libstlport \
     libsync \
-    libUMP \
     lights.exynos4 \
     macloader \
-	SamsungDoze \
     Snap \
     tinymix
 
@@ -104,8 +100,6 @@ PRODUCT_PACKAGES += \
 PRODUCT_COPY_FILES += \
     $(COMMON_PATH)/configs/media_profiles.xml:system/etc/media_profiles.xml \
     $(COMMON_PATH)/configs/media_codecs.xml:system/etc/media_codecs.xml \
-    $(COMMON_PATH)/configs/media_codecs_performance.xml:system/etc/media_codecs_performance.xml \
-    $(COMMON_PATH)/configs/media_codecs_google_video_le.xml:system/etc/media_codecs_google_video_le.xml \
     frameworks/av/media/libstagefright/data/media_codecs_google_audio.xml:system/etc/media_codecs_google_audio.xml \
     frameworks/av/media/libstagefright/data/media_codecs_google_telephony.xml:system/etc/media_codecs_google_telephony.xml \
     frameworks/av/media/libstagefright/data/media_codecs_google_video.xml:system/etc/media_codecs_google_video.xml
@@ -127,17 +121,18 @@ PRODUCT_PACKAGES += \
     VisualizationWallpapers \
     librs_jni
 
+
+# Wifi
+PRODUCT_PACKAGES += \
+    libwpa_client \
+    hostapd \
+    dhcpcd.conf \
+    wpa_supplicant \
+    wpa_supplicant.conf
+
 # Charger
 PRODUCT_PACKAGES += \
     charger_res_images
-
-#wifi
-PRODUCT_PACKAGES += \
-    hostapd \
-    dhcpcd.conf \
-    libwpa_client \
-    wpa_supplicant \
-    wpa_supplicant.conf
 
 # These are the hardware-specific features
 PRODUCT_COPY_FILES += \
@@ -146,7 +141,6 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.camera.flash-autofocus.xml:system/etc/permissions/android.hardware.camera.flash-autofocus.xml \
     frameworks/native/data/etc/android.hardware.camera.front.xml:system/etc/permissions/android.hardware.camera.front.xml \
     frameworks/native/data/etc/android.hardware.camera.xml:system/etc/permissions/android.hardware.camera.xml \
-    frameworks/native/data/etc/android.hardware.ethernet.xml:system/etc/permissions/android.hardware.ethernet.xml \
     frameworks/native/data/etc/android.hardware.location.gps.xml:system/etc/permissions/android.hardware.location.gps.xml \
     frameworks/native/data/etc/android.hardware.location.xml:system/etc/permissions/android.hardware.location.xml \
     frameworks/native/data/etc/android.hardware.sensor.accelerometer.xml:system/etc/permissions/android.hardware.sensor.accelerometer.xml \
@@ -168,18 +162,20 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     packages/wallpapers/LivePicker/android.software.live_wallpaper.xml:system/etc/permissions/android.software.live_wallpaper.xml
 
+# Keylayouts
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/configs/excluded-input-devices.xml:system/etc/excluded-input-devices.xml
+
 # Graphics
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.zygote.disable_gl_preload=1 \
-    ro.opengles.version=131072
+    ro.opengles.version=131072 \
+    ro.bq.gpu_to_cpu_unsupported=1 \
+    debug.hwui.render_dirty_regions=false
 
 PRODUCT_TAGS += dalvik.gc.type-precise
 
-$(call inherit-product, frameworks/native/build/phone-xhdpi-2048-dalvik-heap.mk)
-
-# Default to AwesomePlayer
-PRODUCT_PROPERTY_OVERRIDES += \
-    media.stagefright.use-awesome=true
+$(call inherit-product, frameworks/native/build/phone-xhdpi-1024-dalvik-heap.mk)
 
 # Include exynos4 platform specific parts
 TARGET_HAL_PATH := hardware/samsung/exynos4/hal
