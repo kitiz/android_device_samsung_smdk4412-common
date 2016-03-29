@@ -27,6 +27,7 @@ on fs
 
     chown radio system /efs
     chmod 0771 /efs
+    restorecon_recursive /efs
 
 # exfat module
     insmod /system/lib/modules/exfat_core.ko
